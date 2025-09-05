@@ -6,7 +6,7 @@ const MyPageSidebar = () => {
     const inactiveLinkClass = "text-gray-600 hover:bg-gray-100 hover:text-gray-900";
 
     return (
-        <aside className="w-64 flex-shrink-0" aria-label="Sidebar">
+        <aside className="w-full md:w-64 flex-shrink-0" aria-label="Sidebar">
             <div className="overflow-y-auto py-4 px-3 bg-white rounded-lg shadow-md">
                 <ul className="space-y-2">
                     <li>

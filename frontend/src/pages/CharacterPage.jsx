@@ -60,10 +60,10 @@ const CharacterPage = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">캐릭터 관리</h1>
+            <div className="flex flex-col md:flex-row justify-between md:items-center mb-6">
+                <h1 className="text-3xl font-bold mb-4 md:mb-0">캐릭터 관리</h1>
                 {!isFormVisible && (
-                    <button onClick={() => { setEditingCharacter(null); setIsFormVisible(true); }} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => { setEditingCharacter(null); setIsFormVisible(true); }} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded w-full md:w-auto">
                         새 캐릭터 추가
                     </button>
                 )}
