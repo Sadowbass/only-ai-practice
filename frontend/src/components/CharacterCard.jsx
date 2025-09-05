@@ -5,33 +5,36 @@ const CharacterCard = ({ character, onEdit, onDelete }) => {
         return faction === 'HORDE' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800';
     };
 
-    // 백엔드 enum 코드를 프론트엔드 파일명 형식(PascalCase)으로 변환하는 헬퍼 함수
-    const toPascalCase = (snakeCase) => {
-        if (!snakeCase || typeof snakeCase !== 'string') return '';
-        return snakeCase.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
-    };
-
     const getIconUrl = (type, data) => {
         try {
             let filename = '';
-            const classPascal = toPascalCase(data.wowClass);
 
-            if (type === 'classes') {
-                filename = `${classPascal}.jpg`;
-            } else if (type === 'specs') {
-                // wowSpec에서 wowClass 부분을 제거하여 순수 전문화 이름만 추출
-                let specOnlyString = data.wowSpec.replace(data.wowClass, '');
-                specOnlyString = specOnlyString.replace(/^_/, '').replace(/_$/, '');
-                
-                const specPascal = toPascalCase(specOnlyString);
-                
-                filename = `${classPascal}-${specPascal}.jpg`;
+            // 백엔드 enum 코드를 프론트엔드 파일명 형식(PascalCase)으로 변환하는 헬퍼 함수
+            const toPascalCase = (snakeCase) => {
+                if (!snakeCase || typeof snakeCase !== 'string') return '';
+                return snakeCase.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+            };
+
+            switch (type) {
+                case 'factions':
+                    filename = `${data.faction.toLowerCase()}.png`;
+                    break;
+                case 'classes':
+                    filename = `${toPascalCase(data.wowClass)}.jpg`;
+                    break;
+                case 'specs':
+                    const classPascal = toPascalCase(data.wowClass);
+                    let specOnlyString = data.wowSpec.replace(data.wowClass, '').replace(/^_/, '').replace(/_$/, '');
+                    const specPascal = toPascalCase(specOnlyString);
+                    filename = `${classPascal}-${specPascal}.jpg`;
+                    break;
+                default:
+                    return '';
             }
 
-            if (!filename) return '';
             return new URL(`../assets/images/wow/${type}/${filename}`, import.meta.url).href;
         } catch (e) {
-            return '';
+            return ''; // 아이콘 로드 실패 시 빈 경로 반환
         }
     };
 
@@ -44,7 +47,13 @@ const CharacterCard = ({ character, onEdit, onDelete }) => {
                         <p className="text-2xl font-bold text-gray-800">{character.name}</p>
                         <p className="text-base text-gray-500">{character.serverName}</p>
                     </div>
-                    <span className={`px-3 py-1 text-sm font-bold rounded-full ${getFactionClass(character.faction)}`}>
+                    <span className={`px-3 py-1 text-sm font-bold rounded-full flex items-center ${getFactionClass(character.faction)}`}>
+                        <img 
+                            src={getIconUrl('factions', character)} 
+                            alt={character.factionName}
+                            className="w-4 h-4 mr-1.5"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                        />
                         {character.factionName}
                     </span>
                 </div>
